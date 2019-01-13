@@ -1,0 +1,208 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>BFT-Smart-JsonString</groupId>
+  <artifactId>BFT-Smart-JsonString</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>BFT-Smart on a JsonString</name>
+
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <mainClass>JsonStringServer</mainClass>
+      <maven.compile.java.version>1.8</maven.compile.java.version>
+      <shadedClassifierName>executable</shadedClassifierName>
+  </properties>
+
+  <dependencies>
+
+      <dependency>
+          <groupId>bftsmart.tom</groupId>
+          <artifactId>bftsmart</artifactId>
+          <version>1.0</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.7.25</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+          <version>1.7.25</version>
+      </dependency>
+
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-all</artifactId>
+          <version>4.1.32.Final</version>
+      </dependency>
+
+      <dependency>
+          <groupId>commons-codec</groupId>
+          <artifactId>commons-codec</artifactId>
+          <version>1.11</version>
+      </dependency>
+
+  </dependencies>
+
+
+  <build>
+      <defaultGoal>clean initialize compile package</defaultGoal>
+      <plugins>
+
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-install-plugin</artifactId>
+             <version>2.5.2</version>
+             <executions>
+                 <execution>
+                     <id>install-BFT-SMaRt</id>
+                     <phase>initialize</phase>
+                     <goals>
+                         <goal>install-file</goal>
+                     </goals>
+                     <configuration>
+                         <file>${project.basedir}/lib/BFT-SMaRt.jar</file>
+                         <repositoryLayout>default</repositoryLayout>
+                         <groupId>bftsmart.tom</groupId>
+                         <artifactId>bftsmart</artifactId>
+                         <version>1.0</version>
+                         <packaging>jar</packaging>
+                         <generatePom>true</generatePom>
+                     </configuration>
+                 </execution>
+             </executions>
+         </plugin>
+
+         <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.8.0</version>
+              <configuration>
+                  <source>${maven.compile.java.version}</source>
+                  <target>${maven.compile.java.version}</target>
+                  <compilerArgument>-Xlint:all</compilerArgument>
+                  <showWarnings>true</showWarnings>
+                  <showDeprecation>true</showDeprecation>
+              </configuration>
+         </plugin>
+
+         <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>3.1.0</version>
+              <executions>
+                <execution>
+                  <id>default-jar</id>
+                </execution>
+              </executions>
+         </plugin>
+
+         <plugin>
+           <artifactId>maven-assembly-plugin</artifactId>
+           <configuration>
+             <archive>
+               <manifest>
+                 <mainClass>${mainclass}</mainClass>
+               </manifest>
+             </archive>
+             <descriptorRefs>
+               <descriptorRef>jar-with-dependencies</descriptorRef>
+             </descriptorRefs>
+           </configuration>
+           <executions>
+             <execution>
+               <id>make-assembly</id>
+               <phase>package</phase>
+               <goals>
+                 <goal>single</goal>
+               </goals>
+             </execution>
+           </executions>
+         </plugin>
+
+         <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.6.0</version>
+              <executions>
+                  <execution>
+                      <id>client-write</id>
+                      <configuration>
+                        <mainClass>JsonStringClient</mainClass>
+                        <arguments>
+                              <argument>1001</argument>
+                              <argument>{ "field1": "value1", "field2": [ "arr_value1", "arr_value_2" ] }</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+
+                  <execution>
+                      <id>client-read</id>
+                      <configuration>
+                        <mainClass>JsonStringClient</mainClass>
+                        <arguments>
+                              <argument>1002</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+
+                  <execution>
+                      <id>replica-0</id>
+                      <configuration>
+                        <mainClass>JsonStringServer</mainClass>
+                        <arguments>
+                              <argument>0</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>replica-1</id>
+                      <configuration>
+                        <mainClass>JsonStringServer</mainClass>
+                        <arguments>
+                              <argument>1</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>replica-2</id>
+                      <configuration>
+                        <mainClass>JsonStringServer</mainClass>
+                        <arguments>
+                              <argument>2</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>replica-3</id>
+                      <configuration>
+                        <mainClass>JsonStringServer</mainClass>
+                        <arguments>
+                              <argument>3</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>replica-4</id>
+                      <configuration>
+                        <mainClass>JsonStringServer</mainClass>
+                        <arguments>
+                              <argument>4</argument>
+                        </arguments>
+                      </configuration>
+                  </execution>
+              </executions>
+
+         </plugin>
+
+      </plugins>
+  </build>
+
+</project>
+
