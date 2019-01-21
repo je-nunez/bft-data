@@ -86,3 +86,27 @@ When the client writer operates, it logs:
       ... INFO [nioEventLoopGroup-2-4] (NettyClientServerCommunicationSystemClientSide.java:265) - Channel active
       , returned value: { "field1": "value1", "field2": [ "arr_value1", "arr_value_2" ] }
 
+With the logger's default level set to DEBUG for `bftsmart.tom.ServiceReplica` and `bftsmart.tom.ServiceProxy`, it details for the client write example (`mvn exec:java@client-write`) besides the above messages:
+
+      # In the backend-replica:
+       
+      ... DEBUG [Delivery Thread] (ServiceReplica.java:293) - Processing TOMMessage from client 1001 with sequence number 0 for session -1912886745 decided in consensus 0
+      ... DEBUG [Delivery Thread] (ServiceReplica.java:327) - Delivering request from 1001 via SingleExecutable
+      (2) New value was set. Current value = { "field1": "value1", "field2": [ "arr_value1", "arr_value_2" ] }
+      ... DEBUG [Delivery Thread] (ServiceReplica.java:341) - sending reply to 1001
+
+      # In the client communication proxy with the backend replicas (N = 4, F = 1)
+       
+      ... DEBUG [JsonStringClient.main()] (ServiceProxy.java:258) - Sending request (ORDERED_REQUEST) with reqId=0
+      ... DEBUG [JsonStringClient.main()] (ServiceProxy.java:259) - Expected number of matching replies: 3
+      ... DEBUG [nioEventLoopGroup-2-1] (ServiceProxy.java:373) - Synchronously received reply from 0 with sequence number 0
+      ... DEBUG [nioEventLoopGroup-2-2] (ServiceProxy.java:373) - Synchronously received reply from 1 with sequence number 0
+      ... DEBUG [nioEventLoopGroup-2-2] (ServiceProxy.java:393) - Receiving reply from 1 with reqId:0. Putting on pos=1
+      ... DEBUG [nioEventLoopGroup-2-4] (ServiceProxy.java:373) - Synchronously received reply from 3 with sequence number 0
+      ... DEBUG [nioEventLoopGroup-2-4] (ServiceProxy.java:393) - Receiving reply from 3 with reqId:0. Putting on pos=3
+      ... DEBUG [nioEventLoopGroup-2-1] (ServiceProxy.java:393) - Receiving reply from 0 with reqId:0. Putting on pos=0
+      ... DEBUG [JsonStringClient.main()] (ServiceProxy.java:284) - Response extracted = [0:-1912886745:0]
+      , returned value: { "field1": "value1", "field2": [ "arr_value1", "arr_value_2" ] }
+      ... DEBUG [nioEventLoopGroup-2-3] (ServiceProxy.java:373) - Synchronously received reply from 2 with sequence number 0
+      ... DEBUG [nioEventLoopGroup-2-3] (ServiceProxy.java:378) - throwing out request: sender=2 reqId=0
+
