@@ -1,6 +1,6 @@
-# bft-json
+# Brief
 
-Bizantine Fault Tolerance replicas on a JSON string (using the [bft-smart/library](https://github.com/bft-smart/library)).
+Bizantine Fault Tolerance replicas on a data object (using the [bft-smart/library](https://github.com/bft-smart/library)).
 
 # WIP
 
@@ -12,7 +12,7 @@ subject to change. The documentation can be inaccurate.
 The [BFT-smart library](https://github.com/bft-smart/library) has other
 examples of the library, like a
 [string->string map server](https://github.com/bft-smart/library/tree/master/src/bftsmart/demo/map).
-This JSON string server is based on their
+This example was inspired initially on their
 [integer-counter example](https://github.com/bft-smart/library/tree/master/src/bftsmart/demo/counter).
 
 # Compilation
@@ -32,7 +32,7 @@ repo dependency for this library yet.
 
 (Note: The command-line arguments of these run examples below are in the Maven
 `pom.xml` file. You may change it to add more server replicas, or change the
-Json string that the client-writer sends, etc.)
+string that the client-writer sends, etc.)
 
 To run the server replicas (`N` = 4, `F` = 1):
 
