@@ -10,11 +10,20 @@ subject to change. The documentation can be inaccurate.
 
 # Notes
 
-The [BFT-smart library](https://github.com/bft-smart/library) has other
+* The [BFT-smart library](https://github.com/bft-smart/library) has other
 examples of the library, like a
 [string->string map server](https://github.com/bft-smart/library/tree/master/src/bftsmart/demo/map).
 This example was inspired initially on their
 [integer-counter example](https://github.com/bft-smart/library/tree/master/src/bftsmart/demo/counter).
+
+* The present project allows to use either Kryo serialization or the Java
+default serialization to transmit the objects between the BFT nodes and the
+clients. (Kryo is faster if you want to have a high rate of communication with
+the BFT cluster, while the Java default serialization is built-in.) If you
+change one format to the other (and recompile), then you need to remove the
+file "config/currentView" in the BFT data nodes, for this file has the snapshot
+of the last value of the data object in the older serialization format used in
+the previous execution of the BFT cluster.
 
 # Compilation
 
